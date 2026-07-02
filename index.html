@@ -1,8 +1,1105 @@
-<html>
-    <head>
-        <title>Advance Data AI Day3 - Workshop</title>
-    </head>
-    <body>
-        hello world
-    </body>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siam Paragon Food Roulette</title>
+    <style>
+        :root {
+            --ink: #18212f;
+            --muted: #657184;
+            --line: #dce3ec;
+            --surface: #ffffff;
+            --soft: #f4f7fb;
+            --gold: #c7953d;
+            --green: #2d8a68;
+            --red: #c7544a;
+            --blue: #2867b2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--soft);
+            color: var(--ink);
+            font-family: Arial, Tahoma, sans-serif;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+
+        header {
+            background: #111827;
+            color: #fff;
+            padding: 28px 40px;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 42px;
+            line-height: 1.1;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 18px;
+        }
+
+        .demo-pill {
+            flex: 0 0 auto;
+            padding: 12px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 8px;
+            color: #f8fafc;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 28px 28px 36px;
+            display: grid;
+            grid-template-columns: minmax(320px, 420px) 1fr;
+            gap: 24px;
+            min-height: 0;
+        }
+
+        .panel,
+        .result-card,
+        .list-panel {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 16px 40px rgba(17, 24, 39, 0.08);
+        }
+
+        .panel {
+            padding: 22px;
+            align-self: start;
+        }
+
+        .section-title {
+            margin: 0 0 14px;
+            font-size: 24px;
+        }
+
+        .helper {
+            margin: 0 0 18px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.45;
+        }
+
+        .random-button,
+        .search-button,
+        .reset-button {
+            width: 100%;
+            min-height: 64px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 800;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .random-button {
+            background: var(--gold);
+            color: #111827;
+            margin-bottom: 18px;
+        }
+
+        .search-button {
+            background: var(--blue);
+            color: #fff;
+            margin-top: 14px;
+        }
+
+        .reset-button {
+            background: #e7edf5;
+            color: var(--ink);
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        button:hover {
+            filter: brightness(0.98);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .filter-group {
+            margin-top: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        select {
+            width: 100%;
+            min-height: 56px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--ink);
+            font-size: 18px;
+            padding: 0 14px;
+        }
+
+        .content {
+            display: grid;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        .result-card {
+            overflow: hidden;
+        }
+
+        .result-visual {
+            min-height: 190px;
+            padding: 24px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            background: linear-gradient(135deg, #26384f, #f0d093);
+            color: #fff;
+        }
+
+        .mock-image {
+            width: 132px;
+            height: 132px;
+            flex: 0 0 auto;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, 0.18);
+            font-size: 46px;
+            font-weight: 900;
+        }
+
+        .result-visual h2 {
+            margin: 0 0 10px;
+            font-size: 44px;
+            line-height: 1.05;
+            letter-spacing: 0;
+        }
+
+        .result-visual p {
+            margin: 0;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .result-body {
+            padding: 24px;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .badge {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 8px;
+            padding: 0 12px;
+            background: #eef4fb;
+            color: #26384f;
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .badge.wait-low {
+            background: #e2f6ee;
+            color: var(--green);
+        }
+
+        .badge.wait-medium {
+            background: #fff3d6;
+            color: #9a6700;
+        }
+
+        .badge.wait-high {
+            background: #ffe6e3;
+            color: var(--red);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .detail-box {
+            min-height: 96px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 14px;
+            background: #fbfdff;
+        }
+
+        .detail-label {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .detail-value {
+            margin-top: 8px;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .description {
+            margin: 0;
+            color: #334155;
+            font-size: 19px;
+            line-height: 1.5;
+        }
+
+        .list-panel {
+            padding: 20px;
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .list-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .count {
+            color: var(--muted);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .restaurant-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .mini-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 14px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .mini-card:hover {
+            border-color: var(--gold);
+        }
+
+        .mini-card h3 {
+            margin: 0 0 8px;
+            font-size: 19px;
+        }
+
+        .mini-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .empty-state {
+            border: 2px dashed #bfccd9;
+            border-radius: 8px;
+            padding: 34px;
+            background: #fbfdff;
+            text-align: center;
+        }
+
+        .empty-state h2 {
+            margin: 0 0 10px;
+            font-size: 30px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .note {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 920px) {
+            .header-inner,
+            .list-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            main {
+                grid-template-columns: 1fr;
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
+
+            .result-visual {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .details-grid,
+            .restaurant-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 700px) and (max-width: 1180px) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .app {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            header {
+                padding: 14px 20px;
+            }
+
+            .header-inner {
+                flex-direction: row;
+                align-items: center;
+                gap: 16px;
+            }
+
+            h1 {
+                margin-bottom: 4px;
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .demo-pill {
+                padding: 8px 10px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            main {
+                height: calc(100vh - 84px);
+                padding: 12px;
+                grid-template-columns: 300px minmax(0, 1fr);
+                gap: 12px;
+                overflow: hidden;
+            }
+
+            .panel {
+                height: 100%;
+                padding: 14px;
+                overflow: hidden;
+            }
+
+            .section-title {
+                margin-bottom: 6px;
+                font-size: 20px;
+            }
+
+            .helper {
+                margin-bottom: 10px;
+                font-size: 13px;
+                line-height: 1.3;
+            }
+
+            .random-button,
+            .search-button,
+            .reset-button {
+                min-height: 48px;
+                font-size: 18px;
+            }
+
+            .random-button {
+                margin-bottom: 8px;
+            }
+
+            .filter-group {
+                margin-top: 9px;
+            }
+
+            label {
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+
+            select {
+                min-height: 42px;
+                font-size: 15px;
+                padding: 0 10px;
+            }
+
+            .search-button {
+                margin-top: 10px;
+            }
+
+            .reset-button {
+                margin-top: 8px;
+                font-size: 15px;
+            }
+
+            .note {
+                margin-top: 10px;
+                padding: 10px;
+                font-size: 12px;
+                line-height: 1.35;
+            }
+
+            .content {
+                height: 100%;
+                grid-template-rows: minmax(0, 1fr) 168px;
+                gap: 10px;
+                overflow: hidden;
+            }
+
+            .result-card {
+                height: 100%;
+                display: grid;
+                grid-template-rows: 118px minmax(0, 1fr);
+            }
+
+            .result-visual {
+                min-height: 0;
+                padding: 14px;
+                align-items: center;
+            }
+
+            .result-visual h2 {
+                margin-bottom: 6px;
+                font-size: 28px;
+            }
+
+            .result-visual p {
+                font-size: 15px;
+            }
+
+            .mock-image {
+                width: 76px;
+                height: 76px;
+                font-size: 30px;
+            }
+
+            .result-body {
+                padding: 14px;
+                overflow: hidden;
+            }
+
+            .badges {
+                gap: 6px;
+                margin-bottom: 10px;
+            }
+
+            .badge {
+                min-height: 28px;
+                padding: 0 9px;
+                font-size: 12px;
+            }
+
+            .description {
+                font-size: 14px;
+                line-height: 1.35;
+            }
+
+            .details-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 8px;
+                margin-top: 10px;
+            }
+
+            .detail-box {
+                min-height: 66px;
+                padding: 8px;
+            }
+
+            .detail-label {
+                font-size: 11px;
+            }
+
+            .detail-value {
+                margin-top: 4px;
+                font-size: 14px;
+            }
+
+            .list-panel {
+                padding: 12px;
+                overflow: hidden;
+            }
+
+            .list-header {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+
+            .list-header h2 {
+                font-size: 18px;
+            }
+
+            .count {
+                font-size: 13px;
+            }
+
+            .restaurant-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+                max-height: 104px;
+                overflow: hidden;
+            }
+
+            .mini-card {
+                padding: 9px;
+            }
+
+            .mini-card h3 {
+                margin-bottom: 4px;
+                font-size: 14px;
+            }
+
+            .mini-card p {
+                font-size: 12px;
+                line-height: 1.25;
+            }
+
+            .empty-state {
+                padding: 18px;
+            }
+
+            .empty-state h2 {
+                font-size: 20px;
+            }
+
+            .empty-state p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <div class="header-inner">
+                <div>
+                    <h1>Siam Paragon Food Roulette</h1>
+                    <p class="subtitle">Prototype สำหรับจอ touch screen ช่วยสุ่มร้านอาหารด้วย mock data เท่านั้น</p>
+                </div>
+                <div class="demo-pill">Demo Screen | No Login | No Database</div>
+            </div>
+        </header>
+
+        <main>
+            <aside class="panel" aria-label="ตัวกรองร้านอาหาร">
+                <h2 class="section-title">อยากกินอะไรดี?</h2>
+                <p class="helper">กดสุ่มทันที หรือเลือกเงื่อนไขก่อนค้นหาร้านที่เหมาะกับกลุ่มของคุณ</p>
+
+                <button class="random-button" id="randomButton" type="button">สุ่มร้านอาหาร</button>
+
+                <div class="filter-group">
+                    <label for="budgetFilter">งบประมาณต่อคน</label>
+                    <select id="budgetFilter">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="under300">ต่ำกว่า 300</option>
+                        <option value="300to600">300-600</option>
+                        <option value="600plus">600+</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="typeFilter">ประเภทอาหาร</label>
+                    <select id="typeFilter">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Thai">Thai</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Western">Western</option>
+                        <option value="Dessert">Dessert</option>
+                        <option value="Cafe">Cafe</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="floorFilter">ชั้น</label>
+                    <select id="floorFilter">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="G">G</option>
+                        <option value="M">M</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="partyFilter">จำนวนคน</label>
+                    <select id="partyFilter">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3-4">3-4</option>
+                        <option value="5+">5+</option>
+                    </select>
+                </div>
+
+                <button class="search-button" id="searchButton" type="button">ค้นหาร้านอาหาร</button>
+                <button class="reset-button" id="resetButton" type="button">ล้างตัวกรอง</button>
+
+                <div class="note">
+                    หมายเหตุ: ข้อมูลร้านทั้งหมดเป็นข้อมูลจำลองสำหรับการเรียนและการสาธิต prototype เท่านั้น
+                </div>
+            </aside>
+
+            <section class="content" aria-live="polite">
+                <div id="resultArea"></div>
+
+                <div class="list-panel">
+                    <div class="list-header">
+                        <h2>ร้านที่ตรงเงื่อนไข</h2>
+                        <span class="count" id="matchCount">0 ร้าน</span>
+                    </div>
+                    <div class="restaurant-list" id="restaurantList"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const restaurants = [
+            {
+                id: 1,
+                name: "Sushi Hiro",
+                floor: "G",
+                zone: "North Wing",
+                food_type: "Japanese",
+                price_min: 250,
+                price_max: 700,
+                recommended_for: ["Couple", "Family"],
+                open_time: "10:00",
+                close_time: "22:00",
+                waiting_level: "Medium",
+                walking_time: "2 min",
+                image: "hiro.jpg",
+                rating: 4.7,
+                signature_menu: "Salmon Sushi",
+                description: "Fresh premium sushi.",
+                party_size: ["1", "2", "3-4"]
+            },
+            {
+                id: 2,
+                name: "Thai Garden Bowl",
+                floor: "M",
+                zone: "South Hall",
+                food_type: "Thai",
+                price_min: 120,
+                price_max: 350,
+                recommended_for: ["Tourist", "Office Worker", "Family"],
+                open_time: "10:00",
+                close_time: "21:30",
+                waiting_level: "Low",
+                walking_time: "4 min",
+                image: "thai-garden.jpg",
+                rating: 4.4,
+                signature_menu: "Pad Thai Set",
+                description: "Comfort Thai dishes with quick service.",
+                party_size: ["1", "2", "3-4", "5+"]
+            },
+            {
+                id: 3,
+                name: "Dragon Noodle House",
+                floor: "2",
+                zone: "East Atrium",
+                food_type: "Chinese",
+                price_min: 180,
+                price_max: 480,
+                recommended_for: ["Student", "Family"],
+                open_time: "10:30",
+                close_time: "22:00",
+                waiting_level: "Medium",
+                walking_time: "5 min",
+                image: "dragon-noodle.jpg",
+                rating: 4.3,
+                signature_menu: "Roast Duck Noodles",
+                description: "Warm noodle bowls and sharing plates.",
+                party_size: ["1", "2", "3-4", "5+"]
+            },
+            {
+                id: 4,
+                name: "Urban Grill",
+                floor: "3",
+                zone: "West Wing",
+                food_type: "Western",
+                price_min: 420,
+                price_max: 950,
+                recommended_for: ["Couple", "Office Worker"],
+                open_time: "11:00",
+                close_time: "22:00",
+                waiting_level: "High",
+                walking_time: "6 min",
+                image: "urban-grill.jpg",
+                rating: 4.6,
+                signature_menu: "Grilled Steak Plate",
+                description: "Hearty western meals for a slower lunch or dinner.",
+                party_size: ["2", "3-4"]
+            },
+            {
+                id: 5,
+                name: "Sweet Cloud Dessert",
+                floor: "1",
+                zone: "Central Court",
+                food_type: "Dessert",
+                price_min: 90,
+                price_max: 260,
+                recommended_for: ["Student", "Tourist", "Family"],
+                open_time: "10:00",
+                close_time: "22:00",
+                waiting_level: "Low",
+                walking_time: "3 min",
+                image: "sweet-cloud.jpg",
+                rating: 4.5,
+                signature_menu: "Mango Snow Ice",
+                description: "Light desserts for a quick break.",
+                party_size: ["1", "2", "3-4"]
+            },
+            {
+                id: 6,
+                name: "Cafe Compass",
+                floor: "4",
+                zone: "Sky Walk",
+                food_type: "Cafe",
+                price_min: 110,
+                price_max: 320,
+                recommended_for: ["Student", "Office Worker"],
+                open_time: "09:30",
+                close_time: "21:00",
+                waiting_level: "Medium",
+                walking_time: "7 min",
+                image: "cafe-compass.jpg",
+                rating: 4.2,
+                signature_menu: "Iced Latte and Croissant",
+                description: "Casual coffee spot for working or waiting.",
+                party_size: ["1", "2"]
+            },
+            {
+                id: 7,
+                name: "Family Hot Pot Lab",
+                floor: "4",
+                zone: "North Wing",
+                food_type: "Chinese",
+                price_min: 550,
+                price_max: 1200,
+                recommended_for: ["Family", "Tourist"],
+                open_time: "11:00",
+                close_time: "22:00",
+                waiting_level: "High",
+                walking_time: "8 min",
+                image: "hot-pot-lab.jpg",
+                rating: 4.8,
+                signature_menu: "Mixed Hot Pot Set",
+                description: "Group-friendly hot pot with big sharing sets.",
+                party_size: ["3-4", "5+"]
+            },
+            {
+                id: 8,
+                name: "Katsu Corner",
+                floor: "G",
+                zone: "Food Avenue",
+                food_type: "Japanese",
+                price_min: 180,
+                price_max: 420,
+                recommended_for: ["Student", "Office Worker"],
+                open_time: "10:00",
+                close_time: "21:30",
+                waiting_level: "Low",
+                walking_time: "2 min",
+                image: "katsu-corner.jpg",
+                rating: 4.1,
+                signature_menu: "Pork Katsu Curry",
+                description: "Fast Japanese comfort food for busy visitors.",
+                party_size: ["1", "2", "3-4"]
+            },
+            {
+                id: 9,
+                name: "Vista Pasta",
+                floor: "2",
+                zone: "West Wing",
+                food_type: "Western",
+                price_min: 260,
+                price_max: 620,
+                recommended_for: ["Couple", "Tourist", "Family"],
+                open_time: "10:30",
+                close_time: "22:00",
+                waiting_level: "Medium",
+                walking_time: "5 min",
+                image: "vista-pasta.jpg",
+                rating: 4.4,
+                signature_menu: "Cream Truffle Pasta",
+                description: "Pasta plates and easy sharing appetizers.",
+                party_size: ["2", "3-4", "5+"]
+            },
+            {
+                id: 10,
+                name: "Quick Thai Rice",
+                floor: "1",
+                zone: "East Atrium",
+                food_type: "Thai",
+                price_min: 80,
+                price_max: 220,
+                recommended_for: ["Student", "Office Worker"],
+                open_time: "10:00",
+                close_time: "21:00",
+                waiting_level: "Low",
+                walking_time: "4 min",
+                image: "quick-thai.jpg",
+                rating: 4.0,
+                signature_menu: "Basil Chicken Rice",
+                description: "Simple rice dishes for quick meals.",
+                party_size: ["1", "2"]
+            }
+        ];
+
+        const budgetFilter = document.getElementById("budgetFilter");
+        const typeFilter = document.getElementById("typeFilter");
+        const floorFilter = document.getElementById("floorFilter");
+        const partyFilter = document.getElementById("partyFilter");
+        const resultArea = document.getElementById("resultArea");
+        const restaurantList = document.getElementById("restaurantList");
+        const matchCount = document.getElementById("matchCount");
+
+        function getFilteredRestaurants() {
+            const budget = budgetFilter.value;
+            const foodType = typeFilter.value;
+            const floor = floorFilter.value;
+            const partySize = partyFilter.value;
+
+            return restaurants.filter(function (restaurant) {
+                const matchesBudget =
+                    budget === "all" ||
+                    (budget === "under300" && restaurant.price_min < 300) ||
+                    (budget === "300to600" && restaurant.price_max >= 300 && restaurant.price_min <= 600) ||
+                    (budget === "600plus" && restaurant.price_max >= 600);
+
+                const matchesType = foodType === "all" || restaurant.food_type === foodType;
+                const matchesFloor = floor === "all" || restaurant.floor === floor;
+                const matchesParty = partySize === "all" || restaurant.party_size.includes(partySize);
+
+                return matchesBudget && matchesType && matchesFloor && matchesParty;
+            });
+        }
+
+        function waitingClass(level) {
+            if (level === "Low") {
+                return "wait-low";
+            }
+            if (level === "High") {
+                return "wait-high";
+            }
+            return "wait-medium";
+        }
+
+        function renderResult(restaurant) {
+            if (!restaurant) {
+                resultArea.innerHTML = `
+                    <div class="empty-state">
+                        <h2>ยังไม่มีร้านที่ตรงเงื่อนไข</h2>
+                        <p>ลองลดจำนวน filter หรือกดล้างตัวกรองเพื่อเริ่มใหม่</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultArea.innerHTML = `
+                <article class="result-card">
+                    <div class="result-visual">
+                        <div>
+                            <h2>${restaurant.name}</h2>
+                            <p>${restaurant.description}</p>
+                        </div>
+                        <div class="mock-image" aria-label="mock image">${restaurant.food_type.charAt(0)}</div>
+                    </div>
+                    <div class="result-body">
+                        <div class="badges">
+                            <span class="badge">ชั้น ${restaurant.floor}</span>
+                            <span class="badge">${restaurant.zone}</span>
+                            <span class="badge">${restaurant.food_type}</span>
+                            <span class="badge ${waitingClass(restaurant.waiting_level)}">รอ ${restaurant.waiting_level}</span>
+                        </div>
+                        <p class="description">
+                            เมนูแนะนำ: <strong>${restaurant.signature_menu}</strong>
+                            เหมาะสำหรับ ${restaurant.recommended_for.join(", ")}
+                        </p>
+                        <div class="details-grid">
+                            <div class="detail-box">
+                                <div class="detail-label">ราคาโดยประมาณ</div>
+                                <div class="detail-value">${restaurant.price_min}-${restaurant.price_max} บาท</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">เวลาเปิด-ปิด</div>
+                                <div class="detail-value">${restaurant.open_time}-${restaurant.close_time}</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">เดินประมาณ</div>
+                                <div class="detail-value">${restaurant.walking_time}</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">Rating mock</div>
+                                <div class="detail-value">${restaurant.rating}/5</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">จำนวนคนที่เหมาะ</div>
+                                <div class="detail-value">${restaurant.party_size.join(", ")}</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">รูป mock</div>
+                                <div class="detail-value">${restaurant.image}</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderList(filteredRestaurants) {
+            matchCount.textContent = `${filteredRestaurants.length} ร้าน`;
+
+            if (filteredRestaurants.length === 0) {
+                restaurantList.innerHTML = `
+                    <div class="empty-state">
+                        <h2>ไม่พบรายการ</h2>
+                        <p>ไม่มีร้านใน mock data ที่ตรงกับ filter ตอนนี้</p>
+                    </div>
+                `;
+                return;
+            }
+
+            restaurantList.innerHTML = filteredRestaurants.map(function (restaurant) {
+                return `
+                    <div class="mini-card" role="button" tabindex="0" data-id="${restaurant.id}">
+                        <h3>${restaurant.name}</h3>
+                        <p>ชั้น ${restaurant.floor} | ${restaurant.food_type} | ${restaurant.price_min}-${restaurant.price_max} บาท</p>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function searchRestaurants() {
+            const filteredRestaurants = getFilteredRestaurants();
+            renderList(filteredRestaurants);
+            renderResult(filteredRestaurants[0]);
+        }
+
+        function randomRestaurant() {
+            const filteredRestaurants = getFilteredRestaurants();
+            renderList(filteredRestaurants);
+
+            if (filteredRestaurants.length === 0) {
+                renderResult(null);
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * filteredRestaurants.length);
+            renderResult(filteredRestaurants[randomIndex]);
+        }
+
+        function resetFilters() {
+            budgetFilter.value = "all";
+            typeFilter.value = "all";
+            floorFilter.value = "all";
+            partyFilter.value = "all";
+            renderList(restaurants);
+            renderResult(restaurants[0]);
+        }
+
+        document.getElementById("randomButton").addEventListener("click", randomRestaurant);
+        document.getElementById("searchButton").addEventListener("click", searchRestaurants);
+        document.getElementById("resetButton").addEventListener("click", resetFilters);
+
+        restaurantList.addEventListener("click", function (event) {
+            const card = event.target.closest(".mini-card");
+            if (!card) {
+                return;
+            }
+
+            const restaurant = restaurants.find(function (item) {
+                return item.id === Number(card.dataset.id);
+            });
+            renderResult(restaurant);
+        });
+
+        restaurantList.addEventListener("keydown", function (event) {
+            if (event.key !== "Enter" && event.key !== " ") {
+                return;
+            }
+
+            const card = event.target.closest(".mini-card");
+            if (!card) {
+                return;
+            }
+
+            event.preventDefault();
+            const restaurant = restaurants.find(function (item) {
+                return item.id === Number(card.dataset.id);
+            });
+            renderResult(restaurant);
+        });
+
+        resetFilters();
+    </script>
+</body>
 </html>
